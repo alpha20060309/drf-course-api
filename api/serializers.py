@@ -39,6 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             'username',
+            'orders'
         )
 
 class OrderSerializer(serializers.ModelSerializer):
