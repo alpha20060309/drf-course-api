@@ -4,28 +4,31 @@ from api.serializers import *
 from api.models import Product, Order, OrderItem,User
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import generics
 
 
-@api_view(['GET'])
-def product_list(request):
-    products = Product.objects.all()
-    serializer = Productserializer(products, many=True)
-    return Response(serializer.data,200)
+class ProductListApiView(generics.ListAPIView):
+    queryset = Product.objects.exclude(stock__gt=0)
+    serializer_class = Productserializer
 
 
-@api_view(['GET'])
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    serializer = Productserializer(product)
-    return Response(serializer.data,200)
+class ProductDetailApiView(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = Productserializer
+    lookup_url_kwarg = 'product_id'
 
 
-@api_view(['GET'])
-def order_list(request):
-    # orders = Order.objects.all()
-    orders = Order.objects.prefetch_related('items__product')
-    serializer = OrderSerializer(orders, many=True)
-    return Response(serializer.data,200)
+class OrderListApiView(generics.ListAPIView):
+    queryset = Order.objects.prefetch_related('items__product')
+    serializer_class = OrderSerializer
+
+
+# @api_view(['GET'])
+# def order_list(request):
+#     # orders = Order.objects.all()
+#     orders = Order.objects.prefetch_related('items__product')
+#     serializer = OrderSerializer(orders, many=True)
+#     return Response(serializer.data,200)
 
 @api_view(['GET'])
 def user_list(request):
