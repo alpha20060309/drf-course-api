@@ -3,11 +3,28 @@ GET http://127.0.0.1:8000/products/
 Accept: application/json
 
 ###
+GET http://127.0.0.1:8000/products/2/ HTTP/1.1
+
+###
+PUT http://127.0.0.1:8000/products/2/
+Content-Type: application/json
+
+{
+  "name": "Product 2",
+  "price": 10,
+  "description": "Description of product 2",
+  "stock": 10
+}
+
+###
+DELETE http://127.0.0.1:8000/products/1/
+
+###
 
 ### Create a new product
 POST http://127.0.0.1:8000/products/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYwNDQyNDA0LCJpYXQiOjE3NjA0NDIxMDQsImp0aSI6IjFhZDRjNzdkMjNiODRhYzc5NjQxMjFmY2MyZjgzMjlhIiwidXNlcl9pZCI6IjEifQ.FSiaQROsugxojuQhpPq_XLYoOEqCiyH03ePtKqtPgME
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYwNTExNTEwLCJpYXQiOjE3NjA1MTEyMTAsImp0aSI6Ijk0YjMzMGY2ZDM1MTRlMWZiOTMyMzQyZmZkYWRiZDAwIiwidXNlcl9pZCI6IjEifQ.U4Tjz5q40E-CbsLQ7nsddbnJPBU_q94KuAwtLG_emhU
 
 {
   "name": "Product 1",
