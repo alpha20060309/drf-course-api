@@ -42,6 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 class OrderSerializer(serializers.ModelSerializer):
+    # order_id = serializers.UUIDField(read_only=True)
     items = OrderItemSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField(method_name='total')
     username = serializers.CharField(source='user.username')
@@ -49,6 +50,11 @@ class OrderSerializer(serializers.ModelSerializer):
     def total(self,obj):
         order_items = obj.items.all()
         return sum(order_item.item_subtotal for order_item in order_items)
+
+    def update(self, instance, validated_data):
+        instance.status = validated_data.get('status',instance.status)
+        instance.save()
+        return instance
 
     class Meta:
         model = Order
