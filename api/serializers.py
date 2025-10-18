@@ -1,74 +1,96 @@
 from rest_framework import serializers
-from .models import *
+from .models import Product, Order, OrderItem
 
-class Productserializer(serializers.ModelSerializer):
+
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = (
-            'name',
             'description',
+            'name',
             'price',
-            'stock'
-            )
+            'stock',
+        )
 
     def validate_price(self, value):
-        if value <+ 0:
-            raise serializers.ValidationError("Price must be positive")
+        if value <= 0:
+            raise serializers.ValidationError(
+                "Price must be greater than 0."
+            )
         return value
-
+    
 
 class OrderItemSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.name')
-    product_price = serializers.DecimalField(source='product.price',max_digits=16,decimal_places=2)
-    product_stock = serializers.IntegerField(source='product.stock')
+    product_price = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        source='product.price')
 
     class Meta:
         model = OrderItem
         fields = (
             'product_name',
             'product_price',
-            'product_stock',
             'quantity',
-            'order',
             'item_subtotal'
         )
 
-class UserSerializer(serializers.ModelSerializer):
+
+class OrderCreateSerializer(serializers.ModelSerializer):
+    class OrderItemCreateSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = OrderItem
+            fields = ('product', 'quantity')
+
+    order_id = serializers.UUIDField(read_only=True)
+    items = OrderItemCreateSerializer(many=True)
+
+    def create(self, validated_data):
+        orderitem_data = validated_data.pop('items')
+        order = Order.objects.create(**validated_data)
+
+        for item in orderitem_data:
+            OrderItem.objects.create(order=order, **item)
+
+        return order
+
+
     class Meta:
-        model = User
+        model = Order
         fields = (
-            'username',
-            'orders'
+            'order_id',
+            'user',
+            'status',
+            'items',
         )
+        extra_kwargs = {
+            'user': {'read_only': True}
+        }
+
 
 class OrderSerializer(serializers.ModelSerializer):
-    # order_id = serializers.UUIDField(read_only=True)
+    order_id = serializers.UUIDField(read_only=True)
     items = OrderItemSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField(method_name='total')
-    username = serializers.CharField(source='user.username')
 
-    def total(self,obj):
+    def total(self, obj):
         order_items = obj.items.all()
         return sum(order_item.item_subtotal for order_item in order_items)
-
-    def update(self, instance, validated_data):
-        instance.status = validated_data.get('status',instance.status)
-        instance.save()
-        return instance
 
     class Meta:
         model = Order
         fields = (
             'order_id',
             'created_at',
-            'username',
+            'user',
             'status',
             'items',
-            'total_price'
+            'total_price',
         )
 
+
 class ProductInfoSerializer(serializers.Serializer):
-    # get call products, count of products, max price
-    products = Productserializer(many=True)
+    products = ProductSerializer(many=True)
     count = serializers.IntegerField()
     max_price = serializers.FloatField()
