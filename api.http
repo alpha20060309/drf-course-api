@@ -49,7 +49,7 @@ Accept: application/json
 POST http://127.0.0.1:8000/api/token/refresh/
 Content-Type: application/json
 
-{ "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MDUyOTQ1NywiaWF0IjoxNzYwNDQzMDU3LCJqdGkiOiJmY2FiMzE4MTkwNmI0MzUyOTg0YWY0NzY2NjJjYjU4ZSIsInVzZXJfaWQiOiIxIn0.A6KFwcFUDvCvksX3QHFk7NNqf5uflngtf5msNPetTis" }
+{ "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MDg3OTczNywiaWF0IjoxNzYwNzkzMzM3LCJqdGkiOiJjNjQ1MWU5OWM1NDY0OTJlOWY4ODU5NWEyMDY0Y2I1MSIsInVzZXJfaWQiOiIyIn0.Esfd0tM6sQe7DaK3OADS6mWfgxYZJWm6Z8PF327bNrQ" }
 
 ###
 POST http://127.0.0.1:8000/orders/ HTTP/1.1
@@ -69,3 +69,31 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     }
   ]
 }
+
+###
+GET http://127.0.0.1:8000/orders/d75f6760-e075-4f4c-ab4f-b8c1d41ae5ad
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYwNzk0MTA2LCJpYXQiOjE3NjA3OTM4MDYsImp0aSI6IjI5YWU0YzY1ZDA1ODRkNzdhODk1ZGY2Y2M5MzI2MGRiIiwidXNlcl9pZCI6IjIifQ.VA_7ZrkzNaCc4LnhXJvamg-LWcuOphmzCOR-Mi8bRg4
+
+###
+PUT http://127.0.0.1:8000/orders/d75f6760-e075-4f4c-ab4f-b8c1d41ae5ad/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYwNzkzNjQ4LCJpYXQiOjE3NjA3OTMzNDgsImp0aSI6ImQwNWU2MWE1NmU1NTRiOWRiYmEzYWE3OTlhN2Y1N2JlIiwidXNlcl9pZCI6IjIifQ.eCosJxdCKuTPQhBR7krGF5C3WOEg3QZHzdY_23ouAe0
+
+{
+  "status": "confirmed",
+  "items": [
+    {
+      "product": 2,
+      "quantity": 5
+    },
+    {
+      "product": 3,
+      "quantity": 15
+    }
+  ]
+}
+
+###
+DELETE  http://127.0.0.1:8000/orders/d75f6760-e075-4f4c-ab4f-b8c1d41ae5ad/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYwNzk0MTA2LCJpYXQiOjE3NjA3OTM4MDYsImp0aSI6IjI5YWU0YzY1ZDA1ODRkNzdhODk1ZGY2Y2M5MzI2MGRiIiwidXNlcl9pZCI6IjIifQ.VA_7ZrkzNaCc4LnhXJvamg-LWcuOphmzCOR-Mi8bRg4
